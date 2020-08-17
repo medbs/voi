@@ -17,6 +17,21 @@ func main() {
 
 	server.GetOrCreateRoom(1)
 
+	//create session and join room
+	s := core.Session{
+		Addr: &net.UDPAddr{
+			IP:   net.IPv4(127, 0, 0, 1),
+			Port: 0,
+			Zone: "",
+		},
+		RoomId:   1,
+		UserId:   1,
+		PingChan: nil,
+	}
+	server.JoinRoom(&s)
+
+
+	//create packet and its header
 	p := core.Packet{
 		Data: nil,
 		Addr: &net.UDPAddr{
@@ -42,17 +57,6 @@ func main() {
 		fmt.Print(err)
 	}
 
-	/*s := core.Session{
-		Addr: &net.UDPAddr{
-			IP:   net.IPv4(127, 0, 0, 1),
-			Port: 0,
-			Zone: "",
-		},
-		RoomId:   1,
-		UserId:   1,
-		PingChan: nil,
-	}*/
 
-	//server.JoinRoom(&s)
 
 }
