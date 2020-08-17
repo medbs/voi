@@ -47,7 +47,7 @@ func NewVoIPServer(addr string, numLoop int) (*VoIPServer, error) {
 func (vs *VoIPServer) Shutdown() {
 	close(vs.shutdownChan) //goroutine
 	vs.conn.Close()        // socket
-	log.Print("waiting all gorutine are stoped")
+	log.Print("waiting all goroutines are stopped")
 	vs.wg.Wait()
 	// finlize...
 }

@@ -35,7 +35,7 @@ func NewSession(roomId, userId int, addr *net.UDPAddr, conn *net.UDPConn) *Sessi
 		PingChan:     make(chan *PingMessage, 10000),
 		mu:           sync.RWMutex{},
 	}
-	// run gourutines
+	// run goroutines
 	go s.pingLoop()
 	return s
 }
