@@ -33,7 +33,7 @@ func main() {
 
 	//create packet and its header
 	p := core.Packet{
-		Data: nil,
+		Data: make([]byte, 30,30),
 		Addr: &net.UDPAddr{
 			IP: net.IPv4(127, 0, 0, 1),
 		},
@@ -45,12 +45,14 @@ func main() {
 		BodySize:  1,
 	}
 
+	//create ping message
 	m, err := core.NewPingMessage(&p, &h)
 
 	if err != nil {
 		fmt.Print(err)
 	}
 
+	//process the message
 	err = m.Process(server)
 
 	if err != nil {
