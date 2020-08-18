@@ -57,7 +57,7 @@ func (s *Session) String() string {
 }
 
 func (s *Session) Shutdown() {
-	close(s.shutdownChan) //goroutineを止める
+	close(s.shutdownChan)
 	log.Print("waiting all gorutine in %v are stoped", s)
 	s.wg.Wait()
 }

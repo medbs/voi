@@ -9,7 +9,7 @@ import (
 
 func main() {
 
-	server, err := core.NewVoIPServer("127.0.0.1:9091", 2)
+	server, err := core.NewVoIPServer("127.0.0.1:9091", 1000)
 
 	if err != nil {
 		log.Fatal(err)
@@ -39,25 +39,32 @@ func main() {
 		},
 	}
 
-	h := core.Header{
+	fmt.Print(p)
+	/*h := core.Header{
 		MsgType:   2,
 		Timestamp: 1,
 		BodySize:  1,
-	}
+	}*/
 
 	//create ping message
-	m, err := core.NewPingMessage(&p, &h)
+	//m, err := core.NewPingMessage(&p, &h)
 
-	if err != nil {
+	/*if err != nil {
 		fmt.Print(err)
-	}
+	}*/
 
+	
+		//server.PacketChan <- &p
+
+		//fmt.Print(p)
+
+		server.Wg.Wait()
 	//process the message
-	err = m.Process(server)
+	//err = m.Process(server)
 
-	if err != nil {
+	/*if err != nil {
 		fmt.Print(err)
-	}
+	}*/
 
 
 

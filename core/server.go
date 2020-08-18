@@ -8,8 +8,8 @@ import (
 
 type VoIPServer struct {
 	conn         *net.UDPConn
-	packetChan   chan *Packet
-	wg           *sync.WaitGroup
+	PacketChan   chan *Packet
+	Wg           *sync.WaitGroup
 	shutdownChan chan struct{}
 	sessions     map[string]*Session
 	sessionM     sync.RWMutex
@@ -28,8 +28,8 @@ func NewVoIPServer(addr string, numLoop int) (*VoIPServer, error) {
 	}
 	vs := VoIPServer{
 		conn:         conn,
-		packetChan:   make(chan *Packet, 100000),
-		wg:           new(sync.WaitGroup),
+		PacketChan:   make(chan *Packet, 100000),
+		Wg:           new(sync.WaitGroup),
 		shutdownChan: make(chan struct{}),
 		sessions:     make(map[string]*Session),
 		sessionM:     sync.RWMutex{},
@@ -48,37 +48,37 @@ func (vs *VoIPServer) Shutdown() {
 	close(vs.shutdownChan) //goroutine
 	vs.conn.Close()        // socket
 	log.Print("waiting all goroutines are stopped")
-	vs.wg.Wait()
+	vs.Wg.Wait()
 	// finlize...
 }
 
-//UDP
+//read the packet from UDP
 func (vs *VoIPServer) readLoop() {
 	var buf [2048]byte
-	vs.wg.Add(1)
+	vs.Wg.Add(1)
 	defer func() {
-		vs.wg.Done()
+		vs.Wg.Done()
 		vs.Shutdown()
 	}()
 	for {
 		n, addr, err := vs.conn.ReadFromUDP(buf[0:])
 		if err != nil {
-			// socketが死んでるので落とす -> timeoutかEOS
 			return
 		}
-		vs.packetChan <- &Packet{buf[:n], addr}
+		vs.PacketChan <- &Packet{buf[:n], addr}
 	}
 }
 
+//transform packet to message
 func (vs *VoIPServer) analyzeLoop() {
-	vs.wg.Add(1)
+	vs.Wg.Add(1)
 	defer func() {
-		vs.wg.Done()
+		vs.Wg.Done()
 		vs.Shutdown()
 	}()
 	for {
 		select {
-		case p := <-vs.packetChan:
+		case p := <-vs.PacketChan:
 
 			if p == nil {
 				continue
