@@ -45,6 +45,7 @@ func NewVoIPServer(addr string, numLoop int) (*VoIPServer, error) {
 
 // voip
 func (vs *VoIPServer) Shutdown() {
+
 	close(vs.shutdownChan) //goroutine
 	vs.conn.Close()        // socket
 	log.Print("waiting all goroutines are stopped")
@@ -58,7 +59,7 @@ func (vs *VoIPServer) readLoop() {
 	vs.Wg.Add(1)
 	defer func() {
 		vs.Wg.Done()
-		vs.Shutdown()
+		//vs.Shutdown()
 	}()
 	for {
 		n, addr, err := vs.conn.ReadFromUDP(buf[0:])
@@ -74,7 +75,7 @@ func (vs *VoIPServer) analyzeLoop() {
 	vs.Wg.Add(1)
 	defer func() {
 		vs.Wg.Done()
-		vs.Shutdown()
+		//vs.Shutdown()
 	}()
 	for {
 		select {
@@ -87,7 +88,10 @@ func (vs *VoIPServer) analyzeLoop() {
 			if err == nil {
 				continue
 			}
-			msg.Process(vs)
+			err = msg.Process(vs)
+			if err != nil {
+				log.Print(err.Error())
+			}
 		case _, ok := <-vs.shutdownChan:
 			if !ok {
 				log.Print("shutdown analyze loop")
@@ -96,7 +100,6 @@ func (vs *VoIPServer) analyzeLoop() {
 		}
 	}
 }
-
 
 func (vs *VoIPServer) GetConn() *net.UDPConn {
 	return vs.conn

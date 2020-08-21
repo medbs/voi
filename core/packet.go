@@ -45,6 +45,7 @@ func (p *Packet) ToMessage() (Message, error) {
 	case MSG_TYPE_PING:
 		return NewPingMessage(p, header)
 	default:
+		//return NewPingMessage(p, header)
 		return nil, errors.New("packet is not a voip message")
 	}
 }

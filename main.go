@@ -9,7 +9,7 @@ import (
 
 func main() {
 
-	server, err := core.NewVoIPServer("127.0.0.1:9091", 1000)
+	server, err := core.NewVoIPServer("127.0.0.1:9091", 2)
 
 	if err != nil {
 		log.Fatal(err)
@@ -58,7 +58,7 @@ func main() {
 
 		//fmt.Print(p)
 
-		server.Wg.Wait()
+
 	//process the message
 	//err = m.Process(server)
 
@@ -67,5 +67,6 @@ func main() {
 	}*/
 
 
+	server.Wg.Wait()
 
 }
