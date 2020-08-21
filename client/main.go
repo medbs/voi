@@ -34,7 +34,10 @@ func main() {
 		return
 	}
 	fmt.Fprintf(conn, "Hi UDP Server, How are you doing?")
-	_, err = bufio.NewReader(conn).Read(m.Data)
+
+	byteKey := []byte(fmt.Sprintf("%v",m))
+
+	_, err = bufio.NewReader(conn).Read(byteKey)
 	if err == nil {
 		fmt.Printf("%s\n", p)
 	} else {
