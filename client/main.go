@@ -1,7 +1,6 @@
 package main
 
 import (
-	"bufio"
 	"fmt"
 	"net"
 	"voi/core"
@@ -16,7 +15,7 @@ func main() {
 	}
 
 	p := core.Packet{
-		Data: make([]byte, 30,30),
+		Data: make([]byte, 30, 30),
 		Addr: &net.UDPAddr{
 			IP: net.IPv4(127, 0, 0, 1),
 		},
@@ -25,24 +24,24 @@ func main() {
 	//create ping message
 	m, err := core.NewPingMessage(&p, &h)
 
+	fmt.Print(m)
 
-	//pa :=  make([]byte, 1024)
-
-	conn, err := net.Dial("udp", "127.0.0.1:9091")
+	s, err := net.ResolveUDPAddr("udp4", "127.0.0.1:9091")
+	c, err := net.DialUDP("udp4", nil, s)
 	if err != nil {
-		fmt.Printf("Some error %v", err)
+		fmt.Println(err)
 		return
 	}
-	fmt.Fprintf(conn, "Hi UDP Server, How are you doing?")
 
-	byteKey := []byte(fmt.Sprintf("%v",m))
+	fmt.Printf("The UDP server is %s\n", c.RemoteAddr().String())
+	defer c.Close()
 
-	_, err = bufio.NewReader(conn).Read(byteKey)
-	if err == nil {
-		fmt.Printf("%s\n", p)
-	} else {
-		fmt.Printf("Some error %v\n", err)
+	byteKey := []byte(fmt.Sprintf("%v", m))
+	_, err = c.Write(byteKey)
+
+	if err != nil {
+		fmt.Println(err)
+		return
 	}
-	conn.Close()
 
 }

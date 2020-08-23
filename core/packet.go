@@ -28,6 +28,8 @@ func readHeader(packet []byte) (*Header, error) {
 		// lower than defined header size
 		return nil, errors.New("invalid packet size")
 	}
+	/*kek:= string(packet[:])
+	fmt.Print(kek)*/
 	msgType := packet[0]
 	timestamp := binary.LittleEndian.Uint64(packet[1:9])
 	bodySize := binary.LittleEndian.Uint16(packet[9:11])

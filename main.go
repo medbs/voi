@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"net"
 	"voi/core"
@@ -32,14 +31,14 @@ func main() {
 
 
 	//create packet and its header
-	p := core.Packet{
+	/*p := core.Packet{
 		Data: make([]byte, 30,30),
 		Addr: &net.UDPAddr{
 			IP: net.IPv4(127, 0, 0, 1),
 		},
-	}
+	}*/
 
-	fmt.Print(p)
+	//fmt.Print(p)
 	/*h := core.Header{
 		MsgType:   2,
 		Timestamp: 1,
