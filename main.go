@@ -20,7 +20,7 @@ func main() {
 	s := core.Session{
 		Addr: &net.UDPAddr{
 			IP:   net.IPv4(127, 0, 0, 1),
-			Port: 53566,
+			Port: 7777,
 			Zone: "",
 		},
 		RoomId:   1,
@@ -28,43 +28,6 @@ func main() {
 		PingChan: nil,
 	}
 	server.JoinRoom(&s)
-
-
-	//create packet and its header
-	/*p := core.Packet{
-		Data: make([]byte, 30,30),
-		Addr: &net.UDPAddr{
-			IP: net.IPv4(127, 0, 0, 1),
-		},
-	}*/
-
-	//fmt.Print(p)
-	/*h := core.Header{
-		MsgType:   2,
-		Timestamp: 1,
-		BodySize:  1,
-	}*/
-
-	//create ping message
-	//m, err := core.NewPingMessage(&p, &h)
-
-	/*if err != nil {
-		fmt.Print(err)
-	}*/
-
-	
-		//server.PacketChan <- &p
-
-		//fmt.Print(p)
-
-
-	//process the message
-	//err = m.Process(server)
-
-	/*if err != nil {
-		fmt.Print(err)
-	}*/
-
 
 	server.Wg.Wait()
 

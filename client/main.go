@@ -17,7 +17,9 @@ func main() {
 	p := core.Packet{
 		//Data: make([]byte, 30, 30),
 		Addr: &net.UDPAddr{
-			IP: net.IPv4(127, 0, 0, 1),
+			IP:   net.IPv4(127, 0, 0, 1),
+			Port: 7777,
+			Zone: "",
 		},
 	}
 

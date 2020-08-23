@@ -3,7 +3,7 @@ package core
 import (
 	"bytes"
 	"errors"
-	"log"
+	"fmt"
 )
 
 type PingMessage struct {
@@ -38,7 +38,7 @@ func (m *PingMessage) Process(vs *VoIPServer) error {
 		return errors.New("not authed")
 	}
 	s.PingChan <- m
-	log.Print("processed")
+	fmt.Print("processed")
 	// send pong
 	// room := s.GetRoom()
 	return nil

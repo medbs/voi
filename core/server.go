@@ -113,7 +113,9 @@ func (vs *VoIPServer) GetSession(addrStr string) *Session {
 	if session, ok := vs.sessions[addrStr]; ok {
 		return session
 	}
-	return nil
+	//todo fix the addrStr random port changing
+	//return nil
+	return vs.sessions["127.0.0.1:7777"]
 }
 
 func (vs *VoIPServer) GetRoom(roomId int) *Room {
