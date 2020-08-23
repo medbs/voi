@@ -90,9 +90,6 @@ func (vs *VoIPServer) analyzeLoop() {
 				break
 			}
 
-			if err == nil {
-				continue
-			}
 			err = msg.Process(vs)
 			if err != nil {
 				log.Print(err.Error())

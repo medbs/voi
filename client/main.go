@@ -1,6 +1,8 @@
 package main
 
 import (
+	"bytes"
+	"encoding/gob"
 	"fmt"
 	"net"
 	"voi/core"
@@ -10,12 +12,10 @@ func main() {
 
 	h := core.Header{
 		MsgType:   2,
-		Timestamp: 1,
-		BodySize:  1,
 	}
 
 	p := core.Packet{
-		Data: make([]byte, 30, 30),
+		//Data: make([]byte, 30, 30),
 		Addr: &net.UDPAddr{
 			IP: net.IPv4(127, 0, 0, 1),
 		},
@@ -36,8 +36,17 @@ func main() {
 	fmt.Printf("The UDP server is %s\n", c.RemoteAddr().String())
 	defer c.Close()
 
-	byteKey := []byte(fmt.Sprintf("%v", m))
-	_, err = c.Write(byteKey)
+	var b bytes.Buffer
+
+	err = gob.NewEncoder(&b).Encode(m)
+
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	//byteKey := []byte(m)
+	_, err = c.Write(b.Bytes())
 
 	if err != nil {
 		fmt.Println(err)

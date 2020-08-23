@@ -20,7 +20,7 @@ func main() {
 	s := core.Session{
 		Addr: &net.UDPAddr{
 			IP:   net.IPv4(127, 0, 0, 1),
-			Port: 0,
+			Port: 53566,
 			Zone: "",
 		},
 		RoomId:   1,

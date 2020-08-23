@@ -1,11 +1,12 @@
 package core
 
 import (
-	"encoding/binary"
+	"bytes"
+	"encoding/gob"
 	"errors"
+	"fmt"
 	"net"
 )
-
 
 const (
 	MSG_TYPE_JOIN = uint8(1)
@@ -28,12 +29,15 @@ func readHeader(packet []byte) (*Header, error) {
 		// lower than defined header size
 		return nil, errors.New("invalid packet size")
 	}
-	/*kek:= string(packet[:])
-	fmt.Print(kek)*/
-	msgType := packet[0]
-	timestamp := binary.LittleEndian.Uint64(packet[1:9])
-	bodySize := binary.LittleEndian.Uint16(packet[9:11])
-	return &Header{msgType, timestamp, bodySize}, nil
+
+	pm := PingMessage{}
+	err := gob.NewDecoder(bytes.NewReader(packet)).Decode(&pm)
+
+	if err != nil {
+		fmt.Print(err)
+	}
+
+	return &Header{pm.MsgType, pm.Timestamp, pm.BodySize}, nil
 }
 
 func (p *Packet) ToMessage() (Message, error) {
@@ -47,7 +51,6 @@ func (p *Packet) ToMessage() (Message, error) {
 	case MSG_TYPE_PING:
 		return NewPingMessage(p, header)
 	default:
-		//return NewPingMessage(p, header)
 		return nil, errors.New("packet is not a voip message")
 	}
 }
