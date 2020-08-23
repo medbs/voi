@@ -25,7 +25,7 @@ func main() {
 		},
 		RoomId:   1,
 		UserId:   1,
-		PingChan: nil,
+		PingChan: make(chan *core.PingMessage,100000),
 	}
 	server.JoinRoom(&s)
 
