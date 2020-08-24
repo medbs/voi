@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net"
 	"voi/core"
@@ -29,6 +30,14 @@ func main() {
 	}
 	server.JoinRoom(&s)
 
+	ses := server.GetSession("127.O.0.1:7777")
+	pm := <-ses.PingChan
+    el:= core.CalculateSendingTime(pm)
+	fmt.Print(el)
+
+
 	server.Wg.Wait()
+
+
 
 }
