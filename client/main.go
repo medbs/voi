@@ -10,6 +10,8 @@ import (
 
 func main() {
 
+	ip, _, err := net.ParseCIDR("127.0.0.1/24")
+
 	h := core.Header{
 		MsgType: 2,
 	}
@@ -17,7 +19,7 @@ func main() {
 	p := core.Packet{
 		//Data: make([]byte, 30, 30),
 		Addr: &net.UDPAddr{
-			IP:   net.IPv4(127, 0, 0, 1),
+			IP:   ip,
 			Port: 7777,
 			Zone: "",
 		},
