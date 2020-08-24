@@ -4,6 +4,7 @@ import (
 	"log"
 	"net"
 	"sync"
+	"time"
 )
 
 type VoIPServer struct {
@@ -66,7 +67,7 @@ func (vs *VoIPServer) readLoop() {
 		if err != nil {
 			return
 		}
-		vs.PacketChan <- &Packet{buf[:n], addr}
+		vs.PacketChan <- &Packet{buf[:n], addr, time.Now(),time.Time{}}
 	}
 }
 

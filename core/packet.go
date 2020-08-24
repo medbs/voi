@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"net"
+	"time"
 )
 
 const (
@@ -16,6 +17,8 @@ const (
 type Packet struct {
 	Data []byte
 	Addr *net.UDPAddr
+	SentTime time.Time
+	ReceivedTime time.Time
 }
 
 type Header struct {

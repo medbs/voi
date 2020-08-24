@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
+	"time"
 )
 
 type PingMessage struct {
@@ -37,6 +38,7 @@ func (m *PingMessage) Process(vs *VoIPServer) error {
 	if s == nil {
 		return errors.New("not authed")
 	}
+	m.ReceivedTime = time.Now()
 	s.PingChan <- m
 	fmt.Print("processed")
 	// send pong

@@ -11,7 +11,7 @@ import (
 func main() {
 
 	h := core.Header{
-		MsgType:   2,
+		MsgType: 2,
 	}
 
 	p := core.Packet{
@@ -26,7 +26,11 @@ func main() {
 	//create ping message
 	m, err := core.NewPingMessage(&p, &h)
 
-	fmt.Print(m)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	//m.SentTime = time.Now()
 
 	s, err := net.ResolveUDPAddr("udp4", "127.0.0.1:9091")
 	c, err := net.DialUDP("udp4", nil, s)
