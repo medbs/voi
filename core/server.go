@@ -18,7 +18,7 @@ type VoIPServer struct {
 	roomM        sync.RWMutex
 }
 
-func NewVoIPServer(addr string, numLoop int, computedData chan Metrics) (*VoIPServer, error) {
+func NewVoIPServer(addr string, numLoop int, msgChannel chan PingMessage) (*VoIPServer, error) {
 	udpAddr, err := net.ResolveUDPAddr("udp4", addr)
 	if err != nil {
 		return nil, err
@@ -39,7 +39,7 @@ func NewVoIPServer(addr string, numLoop int, computedData chan Metrics) (*VoIPSe
 	}
 	go vs.readLoop()
 	for i := 0; i < numLoop; i++ {
-		go vs.analyzeLoop(computedData)
+		go vs.analyzeLoop(msgChannel)
 	}
 	return &vs, nil
 }
@@ -72,10 +72,10 @@ func (vs *VoIPServer) readLoop() {
 }
 
 //transform packet to message
-func (vs *VoIPServer) analyzeLoop(computedData chan Metrics) {
-	pm := make([]PingMessage, 0, 10)
+func (vs *VoIPServer) analyzeLoop(packetChannel chan PingMessage) {
 
-	var min, max, avg float64
+	/*pm := make([]PingMessage, 0, 10)
+	var min, max, avg float64*/
 
 	vs.Wg.Add(1)
 	defer func() {
@@ -95,13 +95,15 @@ func (vs *VoIPServer) analyzeLoop(computedData chan Metrics) {
 				break
 			}
 
-			err, session := msg.Process(vs)
+			err, _ = msg.Process(vs)
 			if err != nil {
 				log.Print(err.Error())
 			}
 
-			pmsg := <-session.PingChan
-			pm = append(pm, *pmsg)
+			//pmsg := <-session.PingChan
+			//packetChannel <- *pmsg
+
+			/*pm = append(pm, *pmsg)
 
 			//todo enhance
 			if len(pm) < 3 {
@@ -117,7 +119,7 @@ func (vs *VoIPServer) analyzeLoop(computedData chan Metrics) {
 				AvgLatency: avg,
 			}
 
-			computedData <- m
+			computedData <- m*/
 
 		case _, ok := <-vs.shutdownChan:
 			if !ok {
