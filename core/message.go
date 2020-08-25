@@ -2,5 +2,5 @@ package core
 
 type Message interface {
 	Parse() error
-	Process(*VoIPServer) error
+	Process(*VoIPServer) (error, Session)
 }

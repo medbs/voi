@@ -17,7 +17,7 @@ func main() {
 	}
 
 	p := core.Packet{
-		//Data: make([]byte, 30, 30),
+		Data: make([]byte, 30, 30),
 		Addr: &net.UDPAddr{
 			IP:   ip,
 			Port: 7777,
@@ -54,8 +54,9 @@ func main() {
 	}
 
 	//byteKey := []byte(m)
-	_, err = c.Write(b.Bytes())
-
+	for i := 0; i < 10; i++ {
+		_, err = c.Write(b.Bytes())
+	}
 	if err != nil {
 		fmt.Println(err)
 		return

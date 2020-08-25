@@ -10,8 +10,8 @@ import (
 func main() {
 
 	//xs := make([]float64, 10)
-
-	server, err := core.NewVoIPServer("127.0.0.1:9091", 2)
+	calculatedData := make(chan core.Metrics)
+	server, err := core.NewVoIPServer("127.0.0.1:9091", 10, calculatedData)
 
 	if err != nil {
 		log.Fatal(err)
@@ -23,7 +23,7 @@ func main() {
 	//create session and join room
 	s := core.Session{
 		Addr: &net.UDPAddr{
-			IP: ip,
+			IP:   ip,
 			Port: 7777,
 			Zone: "",
 		},
@@ -33,10 +33,11 @@ func main() {
 	}
 	server.JoinRoom(&s)
 
-	ses := server.GetSession("127.O.0.1:7777")
-	pm := <-ses.PingChan
-	el := core.CalculateSendingTime(pm)
-	fmt.Println(el)
+	/*ses := server.GetSession("127.O.0.1:7777")
+	pm := <-ses.PingChan*/
+
+	data := <-calculatedData
+	fmt.Println(data)
 
 	server.Wg.Wait()
 

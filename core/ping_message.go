@@ -13,7 +13,6 @@ type PingMessage struct {
 	payload []byte
 }
 
-
 func NewPingMessage(p *Packet, h *Header) (*PingMessage, error) {
 	m := &PingMessage{p, h, make([]byte, 0, 0)}
 	err := m.Parse()
@@ -33,15 +32,20 @@ func (m *PingMessage) ToPong() []byte {
 	return b.Bytes()
 }
 
-func (m *PingMessage) Process(vs *VoIPServer) error {
+func (m *PingMessage) Process(vs *VoIPServer) (error, Session) {
+
 	s := vs.GetSession(m.Addr.String())
 	if s == nil {
-		return errors.New("not authed")
+		return errors.New("not authed"), Session{}
 	}
 	m.ReceivedTime = time.Now()
 	s.PingChan <- m
-	fmt.Print("processed")
+	fmt.Println("processed")
+
+	//fmt.Println(packets)
+	//el := CalculateSendingTime(pm)
+
 	// send pong
 	// room := s.GetRoom()
-	return nil
+	return nil, *s
 }

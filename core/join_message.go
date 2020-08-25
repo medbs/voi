@@ -4,7 +4,6 @@ import (
 	"errors"
 )
 
-
 type JoinMessage struct {
 	*Packet
 	*Header
@@ -25,12 +24,11 @@ func (m *JoinMessage) Parse() error {
 	return nil
 }
 
-func (m *JoinMessage) Process(vs *VoIPServer) error {
+func (m *JoinMessage) Process(vs *VoIPServer) (error, Session) {
 	//uid, rid, err := vs.CheckJoinKey(m.key)
 	/*if err != nil {
 		return err
 	}*/
 	vs.JoinRoom(NewSession(1, 1, m.Addr, vs.GetConn()))
-	return nil
+	return nil, Session{}
 }
-
