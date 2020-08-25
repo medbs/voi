@@ -37,32 +37,23 @@ func main() {
 	}
 	server.JoinRoom(&s)
 
-	/*ses := server.GetSession("127.O.0.1:7777")
-	pm := <-ses.PingChan*/
-
 	ses := server.GetSession("127.O.0.1:7777")
-
-	/*for {
-		select {
-		case pm := <-ses.PingChan:
-			pms = append(pms, *pm)
-
-	}*/
 
 	for {
 		pm := <-ses.PingChan
 		if pm == nil {
-			break
+			return
 		}
 		pms = append(pms, *pm)
 
 		if len(pms) > 9 {
-			fmt.Print("keksimus", len(pms))
+			min, max := core.CalculateMinMaxLatency(pms)
+			avg := core.CalculateAvgLatency(pms)
+			fmt.Print("metrics", min, max, avg)
+			return
 		}
 
 	}
-
-	//fmt.Print("keksimus", len(pms))
 
 	server.Wg.Wait()
 
